@@ -1,0 +1,9 @@
+{
+  "name": "상복 계산기",
+  "short_name": "상복계산기",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f9f9f9",
+  "theme_color": "#4CAF50",
+  "icons": []
+}
