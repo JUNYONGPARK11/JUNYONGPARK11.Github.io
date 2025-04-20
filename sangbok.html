@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>남녀 상복 계산기</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 2em auto;
+      padding: 1em;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    input {
+      width: 80px;
+      padding: 5px;
+      margin: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    pre {
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>남녀 상복 계산기</h2>
+
+  <h4>남자 상복 구성</h4>
+  <label>양복 수량: <input type="number" id="setCount" value="1" min="0"></label><br>
+  <label>넥타이 수량: <input type="number" id="tieCount" value="1" min="0"></label><br>
+  <label>와이셔츠 수량: <input type="number" id="shirtCount" value="1" min="0"></label><br>
+
+  <h4>여자 상복</h4>
+  <label>여자 상복 세트 수량: <input type="number" id="womanCount" value="1" min="0"></label><br>
+
+  <button onclick="calculate()">계산하기</button>
+
+  <h3>계산 결과</h3>
+  <pre id="result"></pre>
+
+  <script>
+    function calculate() {
+      const shirtCount = Number(document.getElementById("shirtCount").value) || 0;
+      const tieCount = Number(document.getElementById("tieCount").value) || 0;
+      const setCount = Number(document.getElementById("setCount").value) || 0;
+      const womanCount = Number(document.getElementById("womanCount").value) || 0;
+
+      // 단가 설정
+      const shirtSell = 15000, shirtBuy = 10000;
+      const tieSell = 5000, tieBuy = 0;
+      const setSell = 30000, setBuy = 15000;
+      const womanSell = 20000, womanBuy = 3000;
+
+      const shirtSales = shirtSell * shirtCount;
+      const shirtCost = shirtBuy * shirtCount;
+      const shirtProfit = shirtSales - shirtCost;
+
+      const tieSales = tieSell * tieCount;
+      const tieCost = tieBuy * tieCount;
+      const tieProfit = tieSales - tieCost;
+
+      const setSales = setSell * setCount;
+      const setCost = setBuy * setCount;
+      const setProfit = setSales - setCost;
+
+      const womanSales = womanSell * womanCount;
+      const womanCost = womanBuy * womanCount;
+      const womanProfit = womanSales - womanCost;
+
+      const totalSales = shirtSales + tieSales + setSales + womanSales;
+      const totalCost = shirtCost + tieCost + setCost + womanCost;
+      const totalProfit = shirtProfit + tieProfit + setProfit + womanProfit;
+      const myProfit = totalProfit / 2;
+
+      const resultText = `
+양복
+- 소비자 판매가: ${setSales.toLocaleString()}원
+- 업체 입금가: ${setCost.toLocaleString()}원
+- 마진: ${setProfit.toLocaleString()}원
+
+넥타이
+- 소비자 판매가: ${tieSales.toLocaleString()}원
+- 업체 입금가: ${tieCost.toLocaleString()}원
+- 마진: ${tieProfit.toLocaleString()}원
+
+와이셔츠
+- 소비자 판매가: ${shirtSales.toLocaleString()}원
+- 업체 입금가: ${shirtCost.toLocaleString()}원
+- 마진: ${shirtProfit.toLocaleString()}원
+
+여자 상복
+- 소비자 판매가: ${womanSales.toLocaleString()}원
+- 업체 입금가: ${womanCost.toLocaleString()}원
+- 마진: ${womanProfit.toLocaleString()}원
+
+[총합]
+- 구성: 양복${setCount} 넥타이${tieCount} 와이셔츠${shirtCount} 여자상복${womanCount}
+- 총 소비자 판매가: ${totalSales.toLocaleString()}원
+- 총 업체 입금가: ${totalCost.toLocaleString()}원
+- 총 마진: ${totalProfit.toLocaleString()}원
+- 내 수익 (÷2): ${myProfit.toLocaleString()}원
+`;
+
+      document.getElementById("result").innerText = resultText;
+    }
+  </script>
+</body>
+</html>
