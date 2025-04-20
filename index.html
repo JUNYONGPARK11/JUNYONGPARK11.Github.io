@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>남녀 상복 계산기</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 2em auto;
+      padding: 1em;
+      background: #f9f9f9;
+      border-radius: 10px;
+    }
+    h2, h3 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    pre {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>남녀 상복 계산기</h2>
+  <label>양복 <input type="number" id="suit" value="1" /></label>
+  <label>넥타이 <input type="number" id="tie" value="1" /></label>
+  <label>와이셔츠 <input type="number" id="shirt" value="1" /></label>
+  <label>여자 상복 <input type="number" id="womanSuit" value="1" /></label>
+  <button onclick="calculate()">계산하기</button>
+
+  <h3>계산 결과</h3>
+  <pre id="result"></pre>
+
+  <script>
+    function calculate() {
+      const suit = Number(document.getElementById("suit").value) || 0;
+      const tie = Number(document.getElementById("tie").value) || 0;
+      const shirt = Number(document.getElementById("shirt").value) || 0;
+      const woman = Number(document.getElementById("womanSuit").value) || 0;
+
+      // 판매가 & 입금가 (소비자 판매가 수정됨)
+      const sell = {
+        suit: 30000, // 양복 판매가 3만원
+        tie: 5000, // 넥타이 판매가 5천원
+        shirt: 15000, // 와이셔츠 판매가 1만5천원
+        woman: 20000
+      };
+      const buy = {
+        suit: 15000,
+        tie: 0,
+        shirt: 10000,
+        woman: 3000
+      };
+
+      // 각 항목별 입금가
+      const suitBuyTotal = suit * buy.suit;
+      const tieBuyTotal = tie * buy.tie;
+      const shirtBuyTotal = shirt * buy.shirt;
+      const womanBuyTotal = woman * buy.woman;
+
+      const sellTotal = (suit * sell.suit) + (tie * sell.tie) + (shirt * sell.shirt) + (woman * sell.woman);
+      const buyTotal = suitBuyTotal + tieBuyTotal + shirtBuyTotal + womanBuyTotal;
+      const profit = sellTotal - buyTotal;
+      const myShare = profit / 2;
+
+      const resultText = `
+구성:
+- 양복: ${suit}
+- 넥타이: ${tie}
+- 와이셔츠: ${shirt}
+- 여자상복: ${woman}
+
+업체 입금가:
+- 양복: ${suitBuyTotal.toLocaleString()}원
+- 넥타이: ${tieBuyTotal.toLocaleString()}원
+- 와이셔츠: ${shirtBuyTotal.toLocaleString()}원
+- 여자상복: ${womanBuyTotal.toLocaleString()}원
+
+소비자 판매가:
+- ${sellTotal.toLocaleString()}원
+
+총 업체 입금가:
+- ${buyTotal.toLocaleString()}원
+
+총 마진: ${profit.toLocaleString()}원 (양복${suit} 넥타이${tie} 와이셔츠${shirt} 여자상복${woman})
+내 수익 (÷2): ${myShare.toLocaleString()}원
+      `;
+
+      document.getElementById("result").innerText = resultText;
+    }
+  </script>
+</body>
+</html>
