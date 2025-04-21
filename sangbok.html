@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>남녀 상복 계산기</title>
   <style>
     body {
@@ -10,39 +11,47 @@
       margin: 2em auto;
       padding: 1em;
       background: #f9f9f9;
-      border: 1px solid #ccc;
       border-radius: 10px;
     }
+    h2, h3 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
     input {
-      width: 80px;
-      padding: 5px;
-      margin: 5px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
     }
     button {
-      padding: 10px 20px;
-      margin-top: 10px;
-      cursor: pointer;
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
     }
     pre {
-      background: #fff;
-      padding: 10px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      margin-top: 20px;
       white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
   <h2>남녀 상복 계산기</h2>
-
-  <h4>남자 상복 구성</h4>
-  <label>양복 수량: <input type="number" id="setCount" value="1" min="0"></label><br>
-  <label>넥타이 수량: <input type="number" id="tieCount" value="1" min="0"></label><br>
-  <label>와이셔츠 수량: <input type="number" id="shirtCount" value="1" min="0"></label><br>
-
-  <h4>여자 상복</h4>
-  <label>여자 상복 세트 수량: <input type="number" id="womanCount" value="1" min="0"></label><br>
-
+  <label>추가 양복 <input type="number" id="suit" value="0" /></label>
+  <label>추가 넥타이 <input type="number" id="tie" value="0" /></label>
+  <label>추가 와이셔츠 <input type="number" id="shirt" value="0" /></label>
+  <label>추가 여자 상복 <input type="number" id="womanSuit" value="0" /></label>
   <button onclick="calculate()">계산하기</button>
 
   <h3>계산 결과</h3>
@@ -50,66 +59,70 @@
 
   <script>
     function calculate() {
-      const shirtCount = Number(document.getElementById("shirtCount").value) || 0;
-      const tieCount = Number(document.getElementById("tieCount").value) || 0;
-      const setCount = Number(document.getElementById("setCount").value) || 0;
-      const womanCount = Number(document.getElementById("womanCount").value) || 0;
+      const suitExtra = Number(document.getElementById("suit").value) || 0;
+      const tieExtra = Number(document.getElementById("tie").value) || 0;
+      const shirtExtra = Number(document.getElementById("shirt").value) || 0;
+      const womanExtra = Number(document.getElementById("womanSuit").value) || 0;
 
-      // 단가 설정
-      const shirtSell = 15000, shirtBuy = 10000;
-      const tieSell = 5000, tieBuy = 0;
-      const setSell = 30000, setBuy = 15000;
-      const womanSell = 20000, womanBuy = 3000;
+      const base = 3;
 
-      const shirtSales = shirtSell * shirtCount;
-      const shirtCost = shirtBuy * shirtCount;
-      const shirtProfit = shirtSales - shirtCost;
+      const suitTotal = suitExtra + base;
+      const tieTotal = tieExtra + base;
+      const shirtTotal = shirtExtra + base;
+      const womanTotal = womanExtra + base;
 
-      const tieSales = tieSell * tieCount;
-      const tieCost = tieBuy * tieCount;
-      const tieProfit = tieSales - tieCost;
+      const sell = {
+        suit: 30000,
+        tie: 5000,
+        shirt: 15000,
+        woman: 20000
+      };
+      const buy = {
+        suit: 15000,
+        tie: 0,
+        shirt: 10000,
+        woman: 3000
+      };
 
-      const setSales = setSell * setCount;
-      const setCost = setBuy * setCount;
-      const setProfit = setSales - setCost;
+      const suitBuyTotal = suitTotal * buy.suit;
+      const tieBuyTotal = tieTotal * buy.tie;
+      const shirtBuyTotal = shirtTotal * buy.shirt;
+      const womanBuyTotal = womanTotal * buy.woman;
 
-      const womanSales = womanSell * womanCount;
-      const womanCost = womanBuy * womanCount;
-      const womanProfit = womanSales - womanCost;
+      const baseBuyTotal = (base * buy.suit) + (base * buy.tie) + (base * buy.shirt) + (base * buy.woman);
+      const totalBuy = suitBuyTotal + tieBuyTotal + shirtBuyTotal + womanBuyTotal;
 
-      const totalSales = shirtSales + tieSales + setSales + womanSales;
-      const totalCost = shirtCost + tieCost + setCost + womanCost;
-      const totalProfit = shirtProfit + tieProfit + setProfit + womanProfit;
-      const myProfit = totalProfit / 2;
+      const extraSellTotal = (suitExtra * sell.suit) + (tieExtra * sell.tie) + (shirtExtra * sell.shirt) + (womanExtra * sell.woman);
+      const extraBuyTotal = (suitExtra * buy.suit) + (tieExtra * buy.tie) + (shirtExtra * buy.shirt) + (womanExtra * buy.woman);
+      const profit = extraSellTotal - extraBuyTotal;
+      const myShare = profit / 2;
 
       const resultText = `
-양복
-- 소비자 판매가: ${setSales.toLocaleString()}원
-- 업체 입금가: ${setCost.toLocaleString()}원
-- 마진: ${setProfit.toLocaleString()}원
+[총 구성 수량 = 기본 3개 + 추가 수량]
 
-넥타이
-- 소비자 판매가: ${tieSales.toLocaleString()}원
-- 업체 입금가: ${tieCost.toLocaleString()}원
-- 마진: ${tieProfit.toLocaleString()}원
+구성:
+- 양복: ${suitTotal} (기본 3 + 추가 ${suitExtra})
+- 넥타이: ${tieTotal} (기본 3 + 추가 ${tieExtra})
+- 와이셔츠: ${shirtTotal} (기본 3 + 추가 ${shirtExtra})
+- 여자상복: ${womanTotal} (기본 3 + 추가 ${womanExtra})
 
-와이셔츠
-- 소비자 판매가: ${shirtSales.toLocaleString()}원
-- 업체 입금가: ${shirtCost.toLocaleString()}원
-- 마진: ${shirtProfit.toLocaleString()}원
+업체 입금가:
+- 양복: ${suitBuyTotal.toLocaleString()}원
+- 넥타이: ${tieBuyTotal.toLocaleString()}원
+- 와이셔츠: ${shirtBuyTotal.toLocaleString()}원
+- 여자상복: ${womanBuyTotal.toLocaleString()}원
 
-여자 상복
-- 소비자 판매가: ${womanSales.toLocaleString()}원
-- 업체 입금가: ${womanCost.toLocaleString()}원
-- 마진: ${womanProfit.toLocaleString()}원
+총 업체 입금가:
+- ${totalBuy.toLocaleString()}원
 
-[총합]
-- 구성: 양복${setCount} 넥타이${tieCount} 와이셔츠${shirtCount} 여자상복${womanCount}
-- 총 소비자 판매가: ${totalSales.toLocaleString()}원
-- 총 업체 입금가: ${totalCost.toLocaleString()}원
-- 총 마진: ${totalProfit.toLocaleString()}원
-- 내 수익 (÷2): ${myProfit.toLocaleString()}원
-`;
+[아래는 추가분 기준 계산]
+
+추가분 소비자 판매가:
+- ${extraSellTotal.toLocaleString()}원
+
+추가분 총 마진: ${profit.toLocaleString()}원
+내 수익 (÷2): ${myShare.toLocaleString()}원
+      `;
 
       document.getElementById("result").innerText = resultText;
     }
