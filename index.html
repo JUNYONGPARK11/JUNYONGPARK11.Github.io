@@ -64,11 +64,10 @@
       const shirt = Number(document.getElementById("shirt").value) || 0;
       const woman = Number(document.getElementById("womanSuit").value) || 0;
 
-      // 판매가 & 입금가 (소비자 판매가 수정됨)
       const sell = {
-        suit: 30000, // 양복 판매가 3만원
-        tie: 5000, // 넥타이 판매가 5천원
-        shirt: 15000, // 와이셔츠 판매가 1만5천원
+        suit: 30000,
+        tie: 5000,
+        shirt: 15000,
         woman: 20000
       };
       const buy = {
@@ -78,7 +77,6 @@
         woman: 3000
       };
 
-      // 각 항목별 입금가
       const suitBuyTotal = suit * buy.suit;
       const tieBuyTotal = tie * buy.tie;
       const shirtBuyTotal = shirt * buy.shirt;
@@ -108,7 +106,7 @@
 총 업체 입금가:
 - ${buyTotal.toLocaleString()}원
 
-총 마진: ${profit.toLocaleString()}원 (양복${suit} 넥타이${tie} 와이셔츠${shirt} 여자상복${woman})
+총 마진: ${profit.toLocaleString()}원
 내 수익 (÷2): ${myShare.toLocaleString()}원
       `;
 
