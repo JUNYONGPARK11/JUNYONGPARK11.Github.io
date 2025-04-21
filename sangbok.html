@@ -66,7 +66,6 @@
       const inputShirt = Number(document.getElementById("shirt").value) || 0;
       const inputWoman = Number(document.getElementById("womanSuit").value) || 0;
 
-      // 기본 제공 수량
       const base = {
         suit: 3,
         tie: 3,
@@ -74,7 +73,6 @@
         woman: 5
       };
 
-      // 추가 수량 계산
       const extra = {
         suit: Math.max(0, inputSuit - base.suit),
         tie: Math.max(0, inputTie - base.tie),
@@ -103,7 +101,6 @@
         woman: inputWoman
       };
 
-      // 업체 입금가 (기본 + 추가)
       const baseBuy = {
         suit: Math.min(inputSuit, base.suit) * buy.suit,
         tie: Math.min(inputTie, base.tie) * buy.tie,
@@ -126,8 +123,8 @@
       };
 
       const allBuyTotal = totalBuy.suit + totalBuy.tie + totalBuy.shirt + totalBuy.woman;
+      const baseBuyTotal = baseBuy.suit + baseBuy.tie + baseBuy.shirt + baseBuy.woman;
 
-      // 추가분 소비자 판매가, 업체입금가, 마진
       const extraSellTotal = (extra.suit * sell.suit) + (extra.tie * sell.tie) + (extra.shirt * sell.shirt) + (extra.woman * sell.woman);
       const extraBuyTotal = extraBuy.suit + extraBuy.tie + extraBuy.shirt + extraBuy.woman;
       const profit = extraSellTotal - extraBuyTotal;
@@ -149,7 +146,7 @@
 - 여자상복: ${baseBuy.woman.toLocaleString()} + ${extraBuy.woman.toLocaleString()}원
 
 총 업체 입금가:
-- ${allBuyTotal.toLocaleString()}원 (기본 ${baseBuy.suit + baseBuy.tie + baseBuy.shirt + baseBuy.woman} + 추가 ${extraBuyTotal.toLocaleString()}원)
+- ${allBuyTotal.toLocaleString()}원 (기본 ${baseBuyTotal.toLocaleString()}원 + 추가 ${extraBuyTotal.toLocaleString()}원)
 
 [추가분 기준 계산]
 
