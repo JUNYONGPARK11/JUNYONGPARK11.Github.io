@@ -48,10 +48,12 @@
 </head>
 <body>
   <h2>남녀 상복 계산기</h2>
-  <label>추가 양복 <input type="number" id="suit" value="0" /></label>
-  <label>추가 넥타이 <input type="number" id="tie" value="0" /></label>
-  <label>추가 와이셔츠 <input type="number" id="shirt" value="0" /></label>
-  <label>추가 여자 상복 <input type="number" id="womanSuit" value="0" /></label>
+
+  <label>양복 총 수량 <input type="number" id="suit" value="0" /></label>
+  <label>넥타이 총 수량 <input type="number" id="tie" value="0" /></label>
+  <label>와이셔츠 총 수량 <input type="number" id="shirt" value="0" /></label>
+  <label>여자 상복 총 수량 <input type="number" id="womanSuit" value="0" /></label>
+
   <button onclick="calculate()">계산하기</button>
 
   <h3>계산 결과</h3>
@@ -59,17 +61,26 @@
 
   <script>
     function calculate() {
-      const suitExtra = Number(document.getElementById("suit").value) || 0;
-      const tieExtra = Number(document.getElementById("tie").value) || 0;
-      const shirtExtra = Number(document.getElementById("shirt").value) || 0;
-      const womanExtra = Number(document.getElementById("womanSuit").value) || 0;
+      const inputSuit = Number(document.getElementById("suit").value) || 0;
+      const inputTie = Number(document.getElementById("tie").value) || 0;
+      const inputShirt = Number(document.getElementById("shirt").value) || 0;
+      const inputWoman = Number(document.getElementById("womanSuit").value) || 0;
 
-      const base = 3;
+      // 기본 제공 수량
+      const base = {
+        suit: 3,
+        tie: 3,
+        shirt: 3,
+        woman: 5
+      };
 
-      const suitTotal = suitExtra + base;
-      const tieTotal = tieExtra + base;
-      const shirtTotal = shirtExtra + base;
-      const womanTotal = womanExtra + base;
+      // 추가 수량 계산
+      const extra = {
+        suit: Math.max(0, inputSuit - base.suit),
+        tie: Math.max(0, inputTie - base.tie),
+        shirt: Math.max(0, inputShirt - base.shirt),
+        woman: Math.max(0, inputWoman - base.woman)
+      };
 
       const sell = {
         suit: 30000,
@@ -77,6 +88,7 @@
         shirt: 15000,
         woman: 20000
       };
+
       const buy = {
         suit: 15000,
         tie: 0,
@@ -84,41 +96,68 @@
         woman: 3000
       };
 
-      const suitBuyTotal = suitTotal * buy.suit;
-      const tieBuyTotal = tieTotal * buy.tie;
-      const shirtBuyTotal = shirtTotal * buy.shirt;
-      const womanBuyTotal = womanTotal * buy.woman;
+      const total = {
+        suit: inputSuit,
+        tie: inputTie,
+        shirt: inputShirt,
+        woman: inputWoman
+      };
 
-      const baseBuyTotal = (base * buy.suit) + (base * buy.tie) + (base * buy.shirt) + (base * buy.woman);
-      const totalBuy = suitBuyTotal + tieBuyTotal + shirtBuyTotal + womanBuyTotal;
+      // 업체 입금가 (기본 + 추가)
+      const baseBuy = {
+        suit: Math.min(inputSuit, base.suit) * buy.suit,
+        tie: Math.min(inputTie, base.tie) * buy.tie,
+        shirt: Math.min(inputShirt, base.shirt) * buy.shirt,
+        woman: Math.min(inputWoman, base.woman) * buy.woman
+      };
 
-      const extraSellTotal = (suitExtra * sell.suit) + (tieExtra * sell.tie) + (shirtExtra * sell.shirt) + (womanExtra * sell.woman);
-      const extraBuyTotal = (suitExtra * buy.suit) + (tieExtra * buy.tie) + (shirtExtra * buy.shirt) + (womanExtra * buy.woman);
+      const extraBuy = {
+        suit: extra.suit * buy.suit,
+        tie: extra.tie * buy.tie,
+        shirt: extra.shirt * buy.shirt,
+        woman: extra.woman * buy.woman
+      };
+
+      const totalBuy = {
+        suit: baseBuy.suit + extraBuy.suit,
+        tie: baseBuy.tie + extraBuy.tie,
+        shirt: baseBuy.shirt + extraBuy.shirt,
+        woman: baseBuy.woman + extraBuy.woman
+      };
+
+      const allBuyTotal = totalBuy.suit + totalBuy.tie + totalBuy.shirt + totalBuy.woman;
+
+      // 추가분 소비자 판매가, 업체입금가, 마진
+      const extraSellTotal = (extra.suit * sell.suit) + (extra.tie * sell.tie) + (extra.shirt * sell.shirt) + (extra.woman * sell.woman);
+      const extraBuyTotal = extraBuy.suit + extraBuy.tie + extraBuy.shirt + extraBuy.woman;
       const profit = extraSellTotal - extraBuyTotal;
       const myShare = profit / 2;
 
       const resultText = `
-[총 구성 수량 = 기본 3개 + 추가 수량]
+[총 수량 입력 → 기준 초과 시 추가로 계산됩니다.]
 
 구성:
-- 양복: ${suitTotal} (기본 3 + 추가 ${suitExtra})
-- 넥타이: ${tieTotal} (기본 3 + 추가 ${tieExtra})
-- 와이셔츠: ${shirtTotal} (기본 3 + 추가 ${shirtExtra})
-- 여자상복: ${womanTotal} (기본 3 + 추가 ${womanExtra})
+- 양복: ${total.suit}개 (추가 ${extra.suit})
+- 넥타이: ${total.tie}개 (추가 ${extra.tie})
+- 와이셔츠: ${total.shirt}개 (추가 ${extra.shirt})
+- 여자상복: ${total.woman}개 (추가 ${extra.woman})
 
 업체 입금가:
-- 양복: ${suitBuyTotal.toLocaleString()}원
-- 넥타이: ${tieBuyTotal.toLocaleString()}원
-- 와이셔츠: ${shirtBuyTotal.toLocaleString()}원
-- 여자상복: ${womanBuyTotal.toLocaleString()}원
+- 양복: ${baseBuy.suit.toLocaleString()} + ${extraBuy.suit.toLocaleString()}원
+- 넥타이: ${baseBuy.tie.toLocaleString()} + ${extraBuy.tie.toLocaleString()}원
+- 와이셔츠: ${baseBuy.shirt.toLocaleString()} + ${extraBuy.shirt.toLocaleString()}원
+- 여자상복: ${baseBuy.woman.toLocaleString()} + ${extraBuy.woman.toLocaleString()}원
 
 총 업체 입금가:
-- ${totalBuy.toLocaleString()}원
+- ${allBuyTotal.toLocaleString()}원 (기본 ${baseBuy.suit + baseBuy.tie + baseBuy.shirt + baseBuy.woman} + 추가 ${extraBuyTotal.toLocaleString()}원)
 
-[아래는 추가분 기준 계산]
+[추가분 기준 계산]
 
 추가분 소비자 판매가:
 - ${extraSellTotal.toLocaleString()}원
+
+추가분 업체 입금가:
+- ${extraBuyTotal.toLocaleString()}원
 
 추가분 총 마진: ${profit.toLocaleString()}원
 내 수익 (÷2): ${myShare.toLocaleString()}원
