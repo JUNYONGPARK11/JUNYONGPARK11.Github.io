@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>사십구재 계산기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Apple SD Gothic Neo", "맑은 고딕", Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h2 {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+    label, input, button {
+      font-size: 1rem;
+      margin: 8px 0;
+    }
+    input, button {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    .result h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>사십구재 계산기</h2>
+  <p>기일을 입력하세요:</p>
+  <!-- 달력 입력 -->
+  <input type="date" id="dateInput">
+  <p style="text-align:center;">또는</p>
+  <!-- YYYYMMDD 입력 -->
+  <input type="text" id="textInput" placeholder="예: 20250826">
+  <br><br>
+  <button onclick="calculate()">계산하기</button>
+
+  <div class="result" id="resultBox" style="display:none;">
+    <h3>재 날짜</h3>
+    <ul id="resultList"></ul>
+  </div>
+
+  <script>
+    function parseDate(input) {
+      if (/^\d{8}$/.test(input)) {
+        const year = parseInt(input.substring(0, 4), 10);
+        const month = parseInt(input.substring(4, 6), 10) - 1;
+        const day = parseInt(input.substring(6, 8), 10);
+        return new Date(year, month, day);
+      }
+      return null;
+    }
+
+    function formatDate(date) {
+      const y = date.getFullYear();
+      const m = ("0" + (date.getMonth() + 1)).slice(-2);
+      const d = ("0" + date.getDate()).slice(-2);
+      return `${y}-${m}-${d}`;
+    }
+
+    function calculate() {
+      let baseDate = null;
+      const dateInput = document.getElementById("dateInput").value;
+      if (dateInput) {
+        baseDate = new Date(dateInput);
+      } else {
+        const textInput = document.getElementById("textInput").value.trim();
+        if (textInput) {
+          baseDate = parseDate(textInput);
+        }
+      }
+
+      if (!baseDate || isNaN(baseDate)) {
+        alert("올바른 날짜를 입력하세요.");
+        return;
+      }
+
+      const 재목록 = [
+        "초재",
+        "이재",
+        "삼재",
+        "사재",
+        "오재",
+        "육재",
+        "사십구재"
+      ];
+      const 간격 = [6, 13, 20, 27, 34, 41, 49];
+
+      const resultList = document.getElementById("resultList");
+      resultList.innerHTML = "";
+
+      for (let i = 0; i < 재목록.length; i++) {
+        let d = new Date(baseDate);
+        d.setDate(d.getDate() + 간격[i]);
+        const li = document.createElement("li");
+        li.textContent = `${재목록[i]}: ${formatDate(d)}`;
+        resultList.appendChild(li);
+      }
+
+      document.getElementById("resultBox").style.display = "block";
+    }
+  </script>
+</body>
+</html>
