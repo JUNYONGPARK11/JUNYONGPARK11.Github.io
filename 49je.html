@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -60,78 +60,85 @@
 <body>
   <h2>사십구재 계산기</h2>
   <p>기일을 입력하세요:</p>
+
   <!-- 달력 입력 -->
   <input type="date" id="dateInput">
+
   <p style="text-align:center;">또는</p>
+
   <!-- YYYYMMDD 입력 -->
-  <input type="text" id="textInput" placeholder="예: 20250826">
+  <input type="text" id="textInput" placeholder="예: 20260115">
+
   <br><br>
   <button onclick="calculate()">계산하기</button>
 
   <div class="result" id="resultBox" style="display:none;">
-    <h3>재 날짜</h3>
+    <h3>재 날짜 (임종일을 1일째로 계산)</h3>
     <ul id="resultList"></ul>
   </div>
 
-  <script>
-    function parseDate(input) {
-      if (/^\d{8}$/.test(input)) {
-        const year = parseInt(input.substring(0, 4), 10);
-        const month = parseInt(input.substring(4, 6), 10) - 1;
-        const day = parseInt(input.substring(6, 8), 10);
-        return new Date(year, month, day);
+  <대본>
+    기능. 구문 분석 날짜(입력) {
+ 만약 (/^\\d{8}$/.test(입력)) {
+ const year = parseInt(input.substring(0, 4, 10);
+ const month = parseInt(input.substring(4, 6), 10) - 1;
+ const day = parseInt(input.substring(6, 8, 10);
+ 새 날짜(년, 월, 일)를 반환합니다;
       }
-      return null;
+ null 반환;
     }
 
-    function formatDate(date) {
-      const y = date.getFullYear();
-      const m = ("0" + (date.getMonth() + 1)).slice(-2);
-      const d = ("0" + date.getDate()).slice(-2);
-      return `${y}-${m}-${d}`;
+    기능. 형식 날짜(날짜.) {
+ const y = date.getFullYear();
+ const m = ("0" + (날짜.getMonth() + 1)).슬라이스 (-2);
+ const d = ("0" + date.getDate()).슬라이스 (-2);
+ '${y}-{m}-{d}'를 반환합니다;
     }
 
-    function calculate() {
-      let baseDate = null;
-      const dateInput = document.getElementById("dateInput").value;
-      if (dateInput) {
-        baseDate = new Date(dateInput);
-      } else {
-        const textInput = document.getElementById("textInput").value.trim();
-        if (textInput) {
-          baseDate = parseDate(textInput);
+    기능. 계산한다.() {
+ baseDate = null로 설정합니다;
+
+ const dateInput = document.getElementById("dateInput") 값;
+      한다면 (날짜 입력) {
+ 기준 날짜 = 새 날짜(날짜 입력);
+      } 또 다른 {
+ const textInput = document.getElementById("textInput").value.trim();
+        한다면 (텍스트 입력) {
+ 기준 날짜 = parseDate(텍스트 입력);
         }
       }
 
-      if (!baseDate || isNaN(baseDate)) {
-        alert("올바른 날짜를 입력하세요.");
-        return;
+ 만약 (!baseDate || NaN(baseDate)) {
+ alert("올바른 날짜를 입력하세요.");
+ 반환;
       }
 
-      const 재목록 = [
-        "초재",
-        "이재",
-        "삼재",
-        "사재",
-        "오재",
-        "육재",
-        "사십구재"
-      ];
-      const 간격 = [6, 13, 20, 27, 34, 41, 49];
+ const 재목록  = [
+ "초재 (7일째)",
+ "이재 (14일째)",
+ "삼재 (21일째)",
+ "사재 (28일째)",
+ "오재 (35일째)",
+ "육재 (42일째)",
+        "사십구재 (49일째)"
+ ];
 
-      const resultList = document.getElementById("resultList");
-      resultList.innerHTML = "";
+ const resultList = document.getElementById("resultList");
+ 결과 목록.innerHTML = "";
 
-      for (let i = 0; i < 재목록.length; i++) {
-        let d = new Date(baseDate);
-        d.setDate(d.getDate() + 간격[i]);
-        const li = document.createElement("li");
-        li.textContent = `${재목록[i]}: ${formatDate(d)}`;
-        resultList.appendChild(li);
+ (i = 1, i <= 7, i++) {에 대해
+ d = 새 날짜(기준일);
+
+        // 임종일을 1일째로 계산 → (7*i - 1)일 추가
+ d.setDate(d.getDate()) + (i * 7 - 1);
+
+ const li = document.createElement("li");
+ li.textContent = '${재목록[i - 1]: ${formatDate(d)}';
+ 결과 목록.appendChild(li);
       }
 
-      document.getElementById("resultBox").style.display = "block";
+ document.getElementById("resultBox").style.display = "차단";
     }
-  </script>
+  </대본>
 </body>
-</html>
+</HTML>
