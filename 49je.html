@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -57,25 +57,25 @@
     }
   </style>
 </head>
-<body>
-  <h2>사십구재 계산기</h2>
-  <p>기일을 입력하세요:</p>
+<몸>
+ <h2>사십구재 계산기</h2>
+ <p>기일을 입력하세요:</p>
 
   <!-- 달력 입력 -->
-  <input type="date" id="dateInput">
+ <입력 유형="날짜" ID="날짜입력">
 
-  <p style="text-align:center;">또는</p>
+ <p style="text-align:center;">또는</p>
 
   <!-- YYYYMMDD 입력 -->
-  <input type="text" id="textInput" placeholder="예: 20260115">
+ <입력 유형="text" id="textInput" 자리 표시자="예: 20260115">
 
   <br><br>
-  <button onclick="calculate()">계산하기</button>
+ <버튼 클릭="calculate()">계산하기</버튼>
 
-  <div class="result" id="resultBox" style="display:none;">
-    <h3>재 날짜 (임종일을 1일째로 계산)</h3>
-    <ul id="resultList"></ul>
-  </div>
+ <div class="result" ID="resultBox" 스타일="디스플레이:none;">
+ <h3>재 날짜 (임종일을 1일째로 계산)</h3>
+ <ul id="resultList"></ul>
+  </디브>
 
   <대본>
     기능. 구문 분석 날짜(입력) {
@@ -83,26 +83,26 @@
  const year = parseInt(input.substring(0, 4, 10);
  const month = parseInt(input.substring(4, 6), 10) - 1;
  const day = parseInt(input.substring(6, 8, 10);
- 새 날짜(년, 월, 일)를 반환합니다;
+        return new Date(year, month, day);
       }
- null 반환;
+      return null;
     }
 
-    기능. 형식 날짜(날짜.) {
- const y = date.getFullYear();
- const m = ("0" + (날짜.getMonth() + 1)).슬라이스 (-2);
- const d = ("0" + date.getDate()).슬라이스 (-2);
- '${y}-{m}-{d}'를 반환합니다;
+    function formatDate}date) {
+      const y = date.getFullYear();
+      const m = ("0" + (date.getMonth() + 1)).slice(-2);
+      const d = ("0" + date.getDate()).slice(-2);
+      return `${y}-${m}-${d}`;
     }
 
-    기능. 계산한다.() {
- baseDate = null로 설정합니다;
+    function calculate() {
+      let baseDate = null;
 
- const dateInput = document.getElementById("dateInput") 값;
-      한다면 (날짜 입력) {
- 기준 날짜 = 새 날짜(날짜 입력);
-      } 또 다른 {
- const textInput = document.getElementById("textInput").value.trim();
+      const dateInput = document.getElementById("dateInput").value;
+      if (dateInput) {
+        baseDate = new Date(dateInput);
+      } else {
+        const textInput = document.getElementById("textInput").value.trim();
         한다면 (텍스트 입력) {
  기준 날짜 = parseDate(텍스트 입력);
         }
@@ -140,5 +140,6 @@
  document.getElementById("resultBox").style.display = "차단";
     }
   </대본>
-</body>
+</몸>
 </HTML>
+
